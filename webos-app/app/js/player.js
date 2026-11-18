@@ -208,11 +208,11 @@
       });
 
       // Google Nest SDM requires the offer's m-lines to be audio, video, application
-      // in exactly that order (it 400s otherwise), and it requires the application
-      // (data channel) line to be present. Create them in that order.
+      // in exactly that order (it 400s otherwise). Its client config asks for the
+      // data channel; other providers don't, so only create one when asked.
       pc.addTransceiver('audio', { direction: 'recvonly' });
       pc.addTransceiver('video', { direction: 'recvonly' });
-      pc.createDataChannel(clientConfig.dataChannel || 'nest');
+      if (clientConfig.dataChannel) pc.createDataChannel(clientConfig.dataChannel);
 
       var stream = new MediaStream();
       pc.ontrack = function (e) {
